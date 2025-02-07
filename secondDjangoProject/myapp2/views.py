@@ -1,9 +1,24 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from .models import Item
+from .forms import ItemForm, UserRegisterationForm
+
+# User Registration
+def register(request:HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        form = UserRegisterationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('Login')
+    else:
+        form = UserRegisterationForm()
+    return render(request, 'myapp/register.html', {'form':form})
 
 
 # create your view here
-def home(request):
+def home(request:HttpRequest) -> HttpResponse:
     content = "<html><body><h1>Welcome my People no one hack my account na me yan wetin I yan:</h1></body></html>"
     return HttpResponse(content)
 
