@@ -14,7 +14,20 @@ def register(request:HttpRequest) -> HttpResponse:
             return redirect('Login')
     else:
         form = UserRegisterationForm()
-    return render(request, 'myapp/register.html', {'form':form})
+    return render(request, 'templates/myapp2/register.html', {'form':form})
+
+# User Login
+def user_login(request:HttpRequest) -> HttpResponse:
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('Item_list')
+        else:
+            return render(request, 'templates/myapp/login.html', {'error':'Invalid credentials'})
+    return render(request, 'templates/myapp2/login.html')
 
 
 # create your view here
