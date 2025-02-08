@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
@@ -42,6 +42,7 @@ def user_logout(request:HttpRequest) -> HttpResponseRedirect:
 def item_list(request):
     items = Item.objects.filter(user=request.user)
     return render(request, 'myapp2/item_list.html', {'items': items})
+# Create a new item view function feature
 @login_required
 def item_create(request):
     if request.method == 'POST':
@@ -55,8 +56,24 @@ def item_create(request):
         form = ItemForm()
     # This below item_form.html file we are returning is yet to be implemented.
     return render(request, 'myapp2/item_form.html', {'form': form})
-# Create a new item view function feature
-# create your view here
+
+# Create Update of existing item view function feature
+@login_required
+def item_update(request, pk):
+    item = get_object_or_404(Item, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = ItemForm(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+            return redirect('myapp2:item_list')
+    else:
+        form = ItemForm(instance=item)
+    return render(request, 'myapp2/item_form.html', {'form': form})
+
+
+
+
+
 def home(request:HttpRequest) -> HttpResponse:
     content = "<html><body><h1>Welcome my People no one hack my account na me yan wetin I yan:</h1></body></html>"
     return HttpResponse(content)
