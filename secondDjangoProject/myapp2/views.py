@@ -28,14 +28,14 @@ def user_login(request:HttpRequest) -> HttpResponse:
             login(request, user)
             return redirect('myapp2:item_list')
         else:
-            return render(request, 'myapp/login.html', {'error':'Invalid credentials'})
+            return render(request, 'myapp2/login.html', {'error':'Invalid credentials'})
     return render(request, 'myapp2/login.html')
 
 # User Logout view function feature
 @login_required
 def user_logout(request:HttpRequest) -> HttpResponseRedirect:
     logout(request)
-    return redirect('login')
+    return redirect('myapp2:login')
 
 # List all items view function feature (authenticated users only)
 @login_required
@@ -78,9 +78,6 @@ def item_delete(request, pk):
         item.delete()
         return redirect('myapp2:item_list')
     return render(request, 'myapp2/item_confirm_delete.html', {'item': item})
-
-
-
 
 def home(request:HttpRequest) -> HttpResponse:
     content = "<html><body><h1>Welcome my People no one hack my account na me yan wetin I yan:</h1></body></html>"
