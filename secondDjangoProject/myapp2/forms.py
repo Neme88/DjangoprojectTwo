@@ -10,7 +10,7 @@ class ItemForm(forms.ModelForm):
         model = Item
         fields = ['name', 'description']
 
-class UserRegisterationForm(UserCreationForm):
+class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2']

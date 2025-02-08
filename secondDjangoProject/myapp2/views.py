@@ -3,17 +3,19 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .models import Item
-from .forms import ItemForm, UserRegisterationForm
+from .forms import ItemForm, UserRegistrationForm
 
 # User Registration
 def register(request:HttpRequest) -> HttpResponse:
     if request.method == 'POST':
-        form = UserRegisterationForm(request.POST)
+        form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('Login')
+            return redirect('login')
+        else:
+            print(form.errors)
     else:
-        form = UserRegisterationForm()
+        form = UserRegistrationForm()
     return render(request, 'myapp2/register.html', {'form':form})
 
 # User Login

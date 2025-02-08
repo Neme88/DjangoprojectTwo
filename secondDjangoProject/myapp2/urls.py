@@ -6,11 +6,11 @@ app_name = 'myapp2'
 
 
 urlpatterns = [
-    path('',views.home, name='home'),
+    path('home/',views.home, name='home'),
     path('drinks/<str:drink_name>', views.drinks, name='drink_name'),
     path('foods/<str:category>/', views.list_Of_Food, name='list_of_food'),
-    path('register/', views.register, name='register'),
-    path('login/', views.user_login, name='login'),
+    path('', views.register, name='register'),
+    path('accounts/login/', views.user_login, name='login'),
     path('logout/',views.user_logout, name="logout" ),
 
 ]
