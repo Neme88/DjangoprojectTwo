@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Item</title>
+</head>
+<body>
+    <h1>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Item</h1>
+    <form method="POST">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'myapp2:item_list' %}">Back to list</a>
+</body>
+</html>
