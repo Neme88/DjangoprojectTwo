@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .models import Item
@@ -14,7 +14,7 @@ def register(request:HttpRequest) -> HttpResponse:
             return redirect('Login')
     else:
         form = UserRegisterationForm()
-    return render(request, 'templates/myapp2/register.html', {'form':form})
+    return render(request, 'myapp2/register.html', {'form':form})
 
 # User Login
 def user_login(request:HttpRequest) -> HttpResponse:
@@ -26,8 +26,14 @@ def user_login(request:HttpRequest) -> HttpResponse:
             login(request, user)
             return redirect('Item_list')
         else:
-            return render(request, 'templates/myapp/login.html', {'error':'Invalid credentials'})
-    return render(request, 'templates/myapp2/login.html')
+            return render(request, 'myapp/login.html', {'error':'Invalid credentials'})
+    return render(request, 'myapp2/login.html')
+
+# User Logout
+@login_required
+def user_logout(request:HttpRequest) -> HttpResponseRedirect:
+    logout(request)
+    return redirect('login')
 
 
 # create your view here
