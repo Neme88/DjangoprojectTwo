@@ -70,6 +70,14 @@ def item_update(request, pk):
         form = ItemForm(instance=item)
     return render(request, 'myapp2/item_form.html', {'form': form})
 
+# view function to create to feature to Delete an Item
+@login_required
+def item_delete(request, pk):
+    item = get_object_or_404(Item, pk=pk, user=request.user)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('myapp2:item_list')
+    return render(request, 'myapp2/item_confirm_delete.html', {'item': item})
 
 
 
