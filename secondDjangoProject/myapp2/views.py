@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Item
 from .forms import ItemForm, UserRegistrationForm
 
-# User Registration
+# User Registration view function
 def register(request:HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -18,7 +18,7 @@ def register(request:HttpRequest) -> HttpResponse:
         form = UserRegistrationForm()
     return render(request, 'myapp2/register.html', {'form':form})
 
-# User Login
+# User Login view function
 def user_login(request:HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         username = request.POST['username']
@@ -31,13 +31,17 @@ def user_login(request:HttpRequest) -> HttpResponse:
             return render(request, 'myapp/login.html', {'error':'Invalid credentials'})
     return render(request, 'myapp2/login.html')
 
-# User Logout
+# User Logout view function
 @login_required
 def user_logout(request:HttpRequest) -> HttpResponseRedirect:
     logout(request)
     return redirect('login')
 
-
+# List all items view function (authenticated users only)
+@login_required
+def item_list(request):
+    items = Item.objects.filter(user=request.user)
+    return render(request, 'myapp2/item_list.html', {'items': items})
 # create your view here
 def home(request:HttpRequest) -> HttpResponse:
     content = "<html><body><h1>Welcome my People no one hack my account na me yan wetin I yan:</h1></body></html>"
