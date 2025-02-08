@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from .models import Item
 from .forms import ItemForm, UserRegistrationForm
 
-# User Registration view function
+# User Registration view function feature
 def register(request:HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
@@ -18,7 +18,7 @@ def register(request:HttpRequest) -> HttpResponse:
         form = UserRegistrationForm()
     return render(request, 'myapp2/register.html', {'form':form})
 
-# User Login view function
+# User Login view function feature
 def user_login(request:HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         username = request.POST['username']
@@ -26,22 +26,36 @@ def user_login(request:HttpRequest) -> HttpResponse:
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('Item_list')
+            return redirect('myapp2:item_list')
         else:
             return render(request, 'myapp/login.html', {'error':'Invalid credentials'})
     return render(request, 'myapp2/login.html')
 
-# User Logout view function
+# User Logout view function feature
 @login_required
 def user_logout(request:HttpRequest) -> HttpResponseRedirect:
     logout(request)
     return redirect('login')
 
-# List all items view function (authenticated users only)
+# List all items view function feature (authenticated users only)
 @login_required
 def item_list(request):
     items = Item.objects.filter(user=request.user)
     return render(request, 'myapp2/item_list.html', {'items': items})
+@login_required
+def item_create(request):
+    if request.method == 'POST':
+        form = ItemForm(request.POST)
+        if form .is_valid():
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
+            return redirect('myapp2:item_list')
+    else:
+        form = ItemForm()
+    # This below item_form.html file we are returning is yet to be implemented.
+    return render(request, 'myapp2/item_form.html', {'form': form})
+# Create a new item view function feature
 # create your view here
 def home(request:HttpRequest) -> HttpResponse:
     content = "<html><body><h1>Welcome my People no one hack my account na me yan wetin I yan:</h1></body></html>"
